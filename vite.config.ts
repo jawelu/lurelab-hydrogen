@@ -4,6 +4,7 @@ import {oxygen} from '@shopify/mini-oxygen/vite';
 import {reactRouter} from '@react-router/dev/vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import tailwindcss from '@tailwindcss/vite';
+import { vitePlugin as remix } from '@remix-run/dev'
 
 export default defineConfig({
   plugins: [
@@ -12,6 +13,13 @@ export default defineConfig({
     oxygen(),
     reactRouter(),
     tsconfigPaths(),
+    // remix({
+    //   future: {
+    //     v3_fetcherPersist: true,
+    //     v3_relativeSplatPath: true,
+    //     v3_throwAbortReason: true,
+    //   },
+    // }),
   ],
   build: {
     // Allow a strict Content-Security-Policy
@@ -32,6 +40,9 @@ export default defineConfig({
        */
       include: ['set-cookie-parser', 'cookie', 'react-router'],
     },
+  },
+  css: {
+    postcss: './postcss.config.js',
   },
   server: {
     allowedHosts: ['.tryhydrogen.dev'],

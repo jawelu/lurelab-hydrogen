@@ -15,8 +15,11 @@ import favicon from '~/assets/favicon.svg';
 import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
 import resetStyles from '~/styles/reset.css?url';
 import appStyles from '~/styles/app.css?url';
+// import fontStyles from '~/styles/fonts.css?url';
 import tailwindCss from './styles/tailwind.css?url';
 import {PageLayout} from './components/PageLayout';
+import './styles/app.css';
+
 
 export type RootLoader = typeof loader;
 
@@ -54,6 +57,10 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
  */
 export function links() {
   return [
+    {rel: 'stylesheet', href: 'tailwindCss'},
+    {rel: 'stylesheet', href: 'resetStyles'},
+    {rel: 'stylesheet', href: 'appStyles'},
+    // {rel: 'stylesheet', href: 'fontStyles'},
     {
       rel: 'preconnect',
       href: 'https://cdn.shopify.com',
@@ -168,6 +175,7 @@ export function Layout({children}: {children?: React.ReactNode}) {
 export default function App() {
   const data = useRouteLoaderData<RootLoader>('root');
 
+
   if (!data) {
     return <Outlet />;
   }
@@ -179,7 +187,7 @@ export default function App() {
       consent={data.consent}
     >
       <PageLayout {...data}>
-        <Outlet />
+           <Outlet />
       </PageLayout>
     </Analytics.Provider>
   );
@@ -199,7 +207,7 @@ export function ErrorBoundary() {
 
   return (
     <div className="route-error">
-      <h1>Oops</h1>
+      <h1>Oooooooops</h1>
       <h2>{errorStatus}</h2>
       {errorMessage && (
         <fieldset>

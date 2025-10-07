@@ -1,3 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+   --color-brand-navy: #1A2A3A;
+     --color-brand-navyLight: #2A3A4A;
+
+  --color-brand-cream: #F5F2EA;
+
+  --color-brand-gold: #C3A343;
+   --color-brand-goldDark: #B38333;
+
+  --color-brand-gray: #8C8C8C;
+  
+  --font-display: "Satoshi", "sans-serif";
+  --breakpoint-3xl: 1920px;
+  --color-avocado-100: oklch(0.99 0 0);
+  --color-avocado-200: oklch(0.98 0.04 113.22);
+  --color-avocado-300: oklch(0.94 0.11 115.03);
+  --color-avocado-400: oklch(0.92 0.19 114.08);
+  --color-avocado-500: oklch(0.84 0.18 117.33);
+  --color-avocado-600: oklch(0.53 0.12 118.34);
+  --ease-fluid: cubic-bezier(0.3, 0, 0, 1);
+  --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
+  /* ... */
+}
+
 :root {
   --aside-width: 400px;
   --cart-aside-summary-height-with-discount: 300px;
@@ -10,6 +36,15 @@
 
 img {
   border-radius: 4px;
+}
+
+@keyframes progress {
+  0% {width: 0}
+  100% {width: 100%}
+}
+
+.animate-progress {
+  animation: progress 2s ease-in-out infinite
 }
 
 /*

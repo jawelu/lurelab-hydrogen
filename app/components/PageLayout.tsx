@@ -8,7 +8,7 @@ import type {
 import {Aside} from '~/components/Aside';
 import {Footer} from '~/components/Footer';
 import {Header, HeaderMenu} from '~/components/Header';
-import {CartMain} from '~/components/CartMain';
+import {CartMain} from '~/components/cart/CartMain';
 import {
   SEARCH_ENDPOINT,
   SearchFormPredictive,
@@ -56,11 +56,13 @@ export function PageLayout({
 }
 
 function CartAside({cart}: {cart: PageLayoutProps['cart']}) {
+
   return (
     <Aside type="cart" heading="CART">
       <Suspense fallback={<p>Loading cart ...</p>}>
         <Await resolve={cart}>
           {(cart) => {
+            console.log('cart in cartaside in map', cart)
             return <CartMain cart={cart} layout="aside" />;
           }}
         </Await>
