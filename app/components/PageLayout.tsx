@@ -62,7 +62,6 @@ function CartAside({cart}: {cart: PageLayoutProps['cart']}) {
       <Suspense fallback={<p>Loading cart ...</p>}>
         <Await resolve={cart}>
           {(cart) => {
-            console.log('cart in cartaside in map', cart)
             return <CartMain cart={cart} layout="aside" />;
           }}
         </Await>

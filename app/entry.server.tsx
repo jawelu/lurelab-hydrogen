@@ -19,6 +19,13 @@ export default async function handleRequest(
       checkoutDomain: context.env.PUBLIC_CHECKOUT_DOMAIN,
       storeDomain: context.env.PUBLIC_STORE_DOMAIN,
     },
+    mediaSrc: [
+      "'self'",
+      'https://cdn.shopify.com',
+      'https://*.myshopify.com',
+      'data:',
+      'blob:',
+    ],
   });
 
   const body = await renderToReadableStream(

@@ -1,7 +1,6 @@
-import {type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {Await, useLoaderData, Link, type MetaFunction} from 'react-router';
-import {Suspense} from 'react';
-import {Image} from '@shopify/hydrogen';
+import { type LoaderFunctionArgs } from '@shopify/remix-oxygen';
+import { Await, useLoaderData, Link, type MetaFunction } from 'react-router';
+import { Image } from '@shopify/hydrogen';
 import type {
   FeaturedCollectionFragment,
   RecommendedProductsQuery,
@@ -9,9 +8,18 @@ import type {
 // import {ProductItem} from '~/components/ProductItem';
 import { ArrowRight, Divide, Star } from 'lucide-react';
 import ProductItem from '~/components/ProductItem';
+// import Scene from '~/components/Scene';
+import { lazy, Suspense } from 'react';
+// import { ProductMediaViewer } from '~/components/product/Product3DImage';
+
+
+const Scene = lazy(() => import('~/components/Scene'));
+const ProductModelCard = lazy(() => import('~/components/product/ProductModelCard'));
+
+const ProductMediaViewer = lazy(() => import('~/components/product/Product3DImage'));
 
 export const meta: MetaFunction = () => {
-  return [{title: 'Hydrogen | Home'}];
+  return [{ title: 'Hydrogen | Home' }];
 };
 
 export async function loader(args: LoaderFunctionArgs) {
@@ -21,30 +29,43 @@ export async function loader(args: LoaderFunctionArgs) {
   // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
 
-  return {...deferredData, ...criticalData};
+  const criticalData2 = await loadCriticalData2(args);
+
+  return { ...deferredData, ...criticalData, ...criticalData2 };
 }
 
 /**
  * Load data necessary for rendering content above the fold. This is the critical data
  * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
  */
-async function loadCriticalData({context}: LoaderFunctionArgs) {
-  const [{collections}] = await Promise.all([
+async function loadCriticalData({ context }: LoaderFunctionArgs) {
+  const [{ collections }] = await Promise.all([
     context.storefront.query(FEATURED_COLLECTION_QUERY),
     // Add other queries here, so that they are loaded in parallel
   ]);
-
   return {
     featuredCollection: collections.nodes[0],
   };
 }
+
+async function loadCriticalData2({ context }: LoaderFunctionArgs) {
+  const [{ products }] = await Promise.all([
+    context.storefront.query(RECOMMENDED_PRODUCTS_QUERY),
+    // Add other queries here, so that they are loaded in parallel
+  ]);
+  return {
+    recommendedProducts2: products.nodes,
+  };
+}
+
+
 
 /**
  * Load data for rendering content below the fold. This data is deferred and will be
  * fetched after the initial page load. If it's unavailable, the page should still 200.
  * Make sure to not throw any errors here, as it will cause the page to 500.
  */
-function loadDeferredData({context}: LoaderFunctionArgs) {
+function loadDeferredData({ context }: LoaderFunctionArgs) {
   const recommendedProducts = context.storefront
     .query(RECOMMENDED_PRODUCTS_QUERY)
     .catch((error) => {
@@ -58,42 +79,64 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
   };
 }
 
+
+
 export default function Homepage() {
   const data = useLoaderData<typeof loader>();
+
   return (
     <div className="home">
       {/* Hero Section */}
       <section className='relative h-screen min-h-[600px] bg-brand-navy'>
-          <Image
-             alt='Craftsmanship'
-             className='absolute inset-0 w-full h-full object-cover opacity-70'
-             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-             loading="eager"
-             data={{
-              url: "/image/craftsmanship-handcrafting-leather-hands.jpg",
-              width: 1920,
-              height: 1080
-             }}
-          />
-          <div className='relative container mx-auto !px-4 h-full flex items-center'>
-            <div className='max-w-2xl'>
-              <h1 className='font-family-playfair text-4xl md:text-6xl text-white !mb-6'>
-                Artisinal Footwear for the Modern Sophisticate
-              </h1>
-              <p className='font-family-source text-lg text-gray-200 !mb-8'>
-                Handcrafted excellence, designed for distinction
-              </p>
-              <Link 
-                to='/collections/all'
-                className='inline-flex items-center !px-8 !py-4 bg-brand-gold hover:bg-brand-goldDark 
+        <Image
+          alt='Craftsmanship'
+          className='absolute inset-0 w-full h-full object-cover opacity-70'
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          loading="eager"
+          data={{
+            url: "/image/craftsmanship-handcrafting-leather-hands.jpg",
+            width: 1920,
+            height: 1080
+          }}
+        />
+        <div className='relative container mx-auto !px-4 h-full flex items-center'>
+          <div className='max-w-2xl'>
+            <h1 className='font-family-playfair text-4xl md:text-6xl text-white !mb-6'>
+              Artisinal Footwear for the Modern Sophisticate
+            </h1>
+            <p className='font-family-source text-lg text-gray-200 !mb-8'>
+              Handcrafted excellence, designed for distinction
+            </p>
+            <Link
+              to='/collections/all'
+              className='inline-flex items-center !px-8 !py-4 bg-brand-gold hover:bg-brand-goldDark 
                 transition-colors duration-300 text-white font-family-source font-medium'
-              >
-                Explore Collection
-                <ArrowRight className="ml-2 w-5 h-5"/>
-              </Link>
-            </div>
+            >
+              Explore Collection
+              <ArrowRight className="ml-2 w-5 h-5" />
+            </Link>
           </div>
+        </div>
       </section>
+
+      {/* <div className='w-full'>
+              <Suspense fallback={<div>Loading 3D scene...</div>}>
+                <Scene />
+             </Suspense>
+        </div> */}
+
+
+      {/* <div className='w=[400px]'>
+              <Suspense fallback={<div>Loading 3D scene...</div>}>
+        <ProductModelCard
+        title="Duck 3D Modelllll"
+        modelUrl="https://jawelu.myshopify.com/cdn/shop/3d/models/o/531a7ed01cdcaa9b/_.glb"
+/>
+
+             </Suspense>
+        </div>  */}
+
+
 
       {/* Recommended Products */}
       <section className='py-20 px-4 bg-white'>
@@ -102,39 +145,107 @@ export default function Homepage() {
             Our Latest Products
           </h2>
           <div>
-            <Suspense 
-               fallback={
+            <Suspense
+              fallback={
                 <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
                   {
-                    Array.from({length: 4}).map((_, i) => (
+                    Array.from({ length: 4 }).map((_, i) => (
                       <div key={`skeleton-${i}`} className='flex flex-wrap gap-4 animate-pulse'>
-                         <div className='w-20 h-20 bg-gray-200 rounded'/>
-                          <div className='w-20 h-20 bg-gray-200 rounded'/>
-                           <div className='w-20 h-20 bg-gray-200 rounded'/>
+                        <div className='w-20 h-20 bg-gray-200 rounded' />
+                        <div className='w-20 h-20 bg-gray-200 rounded' />
+                        <div className='w-20 h-20 bg-gray-200 rounded' />
                       </div>
                     ))
                   }
                 </div>
-               }
+              }
             >
-                <Await resolve={data.recommendedProducts}>
-                  {(response) => (
-                    <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
-                      {response?.products.nodes.map((product: any) => (
-                        <ProductItem 
-                           key={product.id}
-                           product={product}
-                           loading='lazy'
-                           hidePrice                       
-                        />
-                      ))}
-                    </div>
-                  )}
-                </Await>
+              <Await resolve={data.recommendedProducts}>
+                {(response) => (
+                  <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
+                    {response?.products.nodes.map((product: any) => {
+                   
+                      return (
+                        <ProductItem
+                          key={product.id}
+                          product={product}
+                          loading='lazy'
+                          hidePrice
+                        />)
+                    }
+                    )}
+                  </div>
+                )}
+              </Await>
             </Suspense>
           </div>
         </div>
       </section>
+
+
+
+      {/* Critical Recommended Products */}
+      <section className='py-20 px-4 bg-white'>
+        <div className='container mx-auto'>
+          <h2 className='font-family-playfair text-3xl text-center !mb-12'>
+            Our Latest Products
+          </h2>
+          <div>
+            <Suspense
+              fallback={
+                <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
+                  {
+                    Array.from({ length: 4 }).map((_, i) => (
+                      <div key={`skeleton-${i}`} className='flex flex-wrap gap-4 animate-pulse'>
+                        <div className='w-20 h-20 bg-gray-200 rounded' />
+                        <div className='w-20 h-20 bg-gray-200 rounded' />
+                        <div className='w-20 h-20 bg-gray-200 rounded' />
+                      </div>
+                    ))
+                  }
+                </div>
+              }
+            >
+              <Await resolve={data.recommendedProducts2}>
+                {(response) => (
+                  <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
+                    {response?.map((product: any) => {
+                      return (
+                        // <ProductItem 
+                        //    key={product.id}
+                        //    product={product}
+                        //    loading='lazy'
+                        //    hidePrice                       
+                        // />
+                        <ProductMediaViewer
+                          key={product.id}
+                          media={product.media.nodes.map((m: any) => ({
+                            mediaContentType: m.mediaContentType,
+                            previewImage: m.previewImage
+                              ? { url: m.previewImage.url, altText: m.previewImage.alt || m.previewImage.altText }
+                              : undefined,
+                            sources: m.sources
+                              ? m.sources.map((s: any) => ({
+                                url: s.url,
+                                format: s.format,
+                                mimeType: s.mimeType,
+                              }))
+                              : undefined,
+                          }))}
+                        />
+
+                      )
+                    }
+                    )}
+                  </div>
+                )}
+              </Await>
+            </Suspense>
+          </div>
+        </div>
+      </section>
+
+
 
       {/* CraftsManship Section */}
       <section className='py-20 px-4'>
@@ -142,31 +253,31 @@ export default function Homepage() {
           <div className='grid grid-cols-1 md:grid-cols-2 gap-12 items-center'>
             <div>
               <Image
-                 alt='Craftsmanship'
-                 className='w-full h-150 object-cover'
-                 data={{
+                alt='Craftsmanship'
+                className='w-full h-150 object-cover'
+                data={{
                   url: '/image/craftsmanship-sowing.jpg'
-                 }}
-                 sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw 33vw'
-                 loading='lazy'
+                }}
+                sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw 33vw'
+                loading='lazy'
               />
             </div>
-            
+
             <div className='max-w-xl'>
               <h2 className='font-family-playfair text-3xl !mb-6'>
                 Crafted by Master Artisans
               </h2>
               <p className='font-family-source text-gray-600 !mb-8 leading-relaxed'>
                 LureLab is your source for the best aluminum soft plastic fishing lure molds.
-                 Revolving around the “Do-it yourselfers” in the fishing industry,
-                  our products allow anglers to make high quality baits at severely reduced price.
+                Revolving around the “Do-it yourselfers” in the fishing industry,
+                our products allow anglers to make high quality baits at severely reduced price.
               </p>
               <Link
-                 to="/pages/our-craft"
-                 className='inline-flex items-center font-family-source font-medium text-brand-navy hover:text-brand-gold transition-colors duration-300'
+                to="/pages/our-craft"
+                className='inline-flex items-center font-family-source font-medium text-brand-navy hover:text-brand-gold transition-colors duration-300'
               >
-                 Discover Our Process
-                 <ArrowRight className='ml-2 w-5 h-5'/>
+                Discover Our Process
+                <ArrowRight className='ml-2 w-5 h-5' />
               </Link>
             </div>
           </div>
@@ -177,12 +288,12 @@ export default function Homepage() {
       <section className='py-20 px-4 bg-brand-navy text-white'>
         <div className='container mx-auto max-w-4xl text-center'>
           <div className='flex justify-center'>
-            {Array.from({length: 5}).map((_, i) => (
+            {Array.from({ length: 5 }).map((_, i) => (
               <Star
-                 key={`start-${i}`}
-                 fill="#C3A343"
-                 color="#C3A343"
-                 className="w-8 h-8 mb-8"         
+                key={`start-${i}`}
+                fill="#C3A343"
+                color="#C3A343"
+                className="w-8 h-8 mb-8"
               />
             ))}
           </div>
@@ -234,8 +345,8 @@ function RecommendedProducts({
             <div className="recommended-products-grid">
               {response
                 ? response.products.nodes.map((product: any) => (
-                    <ProductItem key={product.id} product={product} />
-                  ))
+                  <ProductItem key={product.id} product={product} />
+                ))
                 : null}
             </div>
           )}
@@ -269,6 +380,75 @@ const FEATURED_COLLECTION_QUERY = `#graphql
   }
 ` as const;
 
+// const RECOMMENDED_PRODUCTS_QUERY = `#graphql
+//   fragment RecommendedProduct on Product {
+//     id
+//     title
+//     handle
+//     priceRange {
+//       minVariantPrice {
+//         amount
+//         currencyCode
+//       }
+//       maxVariantPrice {
+//         amount
+//          currencyCode
+//       }
+//     }
+//       featuredImage {
+//       id
+//       url
+//       altText
+//       width
+//       height
+//     }
+//     images(first: 2) {
+//       nodes {
+//          id
+//       url
+//       altText
+//       width
+//       height
+//       }
+//     }
+
+//     variants(first: 1){
+//       nodes {
+//         selectedOptions{
+//           name
+//           value
+//         }
+//       }
+//     }
+
+//     media(first: 5) {
+//       nodes {
+//         mediaContentType
+//         alt
+//         previewImage {
+//           url
+//         }
+//         ... on Model3d {
+//           sources {
+//             url
+//             format
+//             mimeType
+//           }
+//         }
+//       }
+//     }
+//   }
+//   query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
+//     @inContext(country: $country, language: $language) {
+//     products(first: 4, sortKey: UPDATED_AT, reverse: true) {
+//       nodes {
+//         ...RecommendedProduct
+//       }
+//     }
+//   }
+// ` as const;
+
+
 const RECOMMENDED_PRODUCTS_QUERY = `#graphql
   fragment RecommendedProduct on Product {
     id
@@ -281,10 +461,10 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
       }
       maxVariantPrice {
         amount
-         currencyCode
+        currencyCode
       }
     }
-      featuredImage {
+    featuredImage {
       id
       url
       altText
@@ -293,11 +473,11 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
     }
     images(first: 2) {
       nodes {
-         id
-      url
-      altText
-      width
-      height
+        id
+        url
+        altText
+        width
+        height
       }
     }
 
@@ -309,7 +489,37 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
         }
       }
     }
+
+    media(first: 5) {
+      nodes {
+        mediaContentType
+        alt
+        previewImage {
+          url
+        }
+
+
+        ... on Model3d {
+          sources {
+            url
+            format
+            mimeType
+          }
+        }
+
+
+        ... on Video {
+          sources {
+            url
+            format
+            mimeType
+          }
+     
+        }
+      }
+    }
   }
+
   query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
     products(first: 4, sortKey: UPDATED_AT, reverse: true) {

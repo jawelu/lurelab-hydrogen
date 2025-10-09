@@ -23,7 +23,6 @@ const ContactPage = () => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setFormStatus('submitting')
-        // console.log('eee', e.target.value)
 
         try {
             // Handle form submissions
