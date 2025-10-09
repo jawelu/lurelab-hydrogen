@@ -58,6 +58,10 @@ export function CartSummary({cart, layout}: CartSummaryProps) {
           <CreditCard className='w-4 h-4'/>
           <span>Secure checkout powered by Shopify</span>
         </div>
+
+           <div>
+          <CartCheckoutActions checkoutUrl={cart?.checkoutUrl} />
+        </div>
       </div>
     </div>
   )

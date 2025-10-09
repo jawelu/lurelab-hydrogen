@@ -385,3 +385,219 @@
 //     </div>
 //   );
 // }
+
+
+
+
+
+
+// Product3DImage组件
+// "use client";
+
+// import React, { Suspense, useRef, useState, useEffect } from "react";
+// import { Canvas } from "@react-three/fiber";
+// import { OrbitControls, useGLTF } from "@react-three/drei";
+// import * as THREE from "three";
+// import { ChevronLeft, ChevronRight, Plus, Minus, RotateCcw, Cuboid } from "lucide-react";
+
+// type ProductMedia = {
+//   mediaContentType: string;
+//   previewImage?: { url: string; altText?: string };
+//   sources?: { url: string; format: string; mimeType?: string }[];
+// };
+
+// type ProductMediaViewerProps = {
+//   media: ProductMedia[];
+//   width?: string;
+//   height?: string;
+// };
+
+// const Model3D: React.FC<{ url: string; scale: number }> = ({ url, scale }) => {
+//     console.log('url in Model3D', url)
+//   const group = useRef<THREE.Group>(null);
+//   const { scene } = useGLTF(url);
+//   scene.scale.setScalar(scale)
+//   return <primitive ref={group} object={scene} scale={scale} />;
+// };
+
+// const ModelSkeleton = () => (
+//   <div className="flex items-center justify-center w-full h-full bg-gray-100 animate-pulse">
+//     <div className="w-16 h-16 rounded-full border-4 border-gray-300 border-t-transparent animate-spin" />
+//   </div>
+// );
+
+// const ProductMediaViewer: React.FC<ProductMediaViewerProps> = ({
+//   media,
+//   width = "100%",
+//   height = "500px",
+// }) => {
+//   const [currentIndex, setCurrentIndex] = useState(0);
+//   const [hovered, setHovered] = useState(false);
+
+//   // ✅ 每个模型都有独立状态
+//   const [modelStates, setModelStates] = useState<
+//     Record<number, { scale: number; orbitRef?: any }>
+//   >({});
+
+//   // 初始化每个模型的默认状态
+//   useEffect(() => {
+//     setModelStates((prev) => {
+//       const updated = { ...prev };
+//       media.forEach((_, i) => {
+//         if (!updated[i]) updated[i] = { scale: 0.025 };
+//       });
+//       return updated;
+//     });
+//   }, [media]);
+
+//   const currentState = modelStates[currentIndex];
+//   const currentMedia = media[currentIndex];
+
+//   console.log('currentMedia.sources', currentMedia.sources)
+
+//   const handlePrev = () =>
+//     setCurrentIndex((prev) => (prev === 0 ? media.length - 1 : prev - 1));
+
+//   const handleNext = () =>
+//     setCurrentIndex((prev) => (prev === media.length - 1 ? 0 : prev + 1));
+
+//   const handleZoomIn = () =>
+//     setModelStates((prev) => ({
+//       ...prev,
+//       [currentIndex]: {
+//         ...prev[currentIndex],
+//         scale: Math.min(prev[currentIndex].scale * 1.2, 0.25),
+//       },
+//     }));
+
+//   const handleZoomOut = () =>
+//     setModelStates((prev) => ({
+//       ...prev,
+//       [currentIndex]: {
+//         ...prev[currentIndex],
+//         scale: Math.max(prev[currentIndex].scale / 1.2, 0.005),
+//       },
+//     }));
+
+//   const handleReset = () =>
+//     setModelStates((prev) => {
+//       const orbit = prev[currentIndex].orbitRef;
+//       if (orbit) {
+//         orbit.reset();
+//       }
+//       return {
+//         ...prev,
+//         [currentIndex]: { ...prev[currentIndex], scale: 0.025 },
+//       };
+//     });
+
+//   return (
+//     <div
+//       className="relative w-full group select-none overflow-hidden rounded-2xl shadow-md"
+//       style={{ width, height }}
+//       onMouseEnter={() => setHovered(true)}
+//       onMouseLeave={() => setHovered(false)}
+//     >
+//       {/* 主展示内容 */}
+//       <div className="w-full h-full bg-gray-100">
+//         {currentMedia.mediaContentType === "IMAGE" &&
+//           currentMedia.previewImage?.url && (
+//             <img
+//               src={currentMedia.previewImage.url}
+//               alt={currentMedia.previewImage.altText || ""}
+//               className="w-full h-full object-cover transition-opacity duration-300"
+//             />
+//           )}
+
+//         {currentMedia.mediaContentType === "MODEL_3D" &&
+//           currentMedia.sources?.length && (
+//             <Suspense fallback={<ModelSkeleton />}>
+//               <Canvas
+//                key={currentIndex}
+//                 camera={{ position: [2, 0, 12.25], fov: 15 }}
+//                 style={{ width: "100%", height: "100%" }}
+//               >
+//                 <ambientLight intensity={1.25} />
+//                 <directionalLight intensity={0.4} />
+//                 <Model3D
+//                   url={
+//                     currentMedia.sources.find((s) => s.format === "glb")?.url ||
+//                     ""
+//                   }
+//                   scale={currentState?.scale}
+//                 />
+//                 <OrbitControls
+//                   ref={(ref) => {
+//                     if (ref && modelStates[currentIndex]?.orbitRef !== ref) {
+//                       setModelStates((prev) => ({
+//                         ...prev,
+//                         [currentIndex]: { ...prev[currentIndex], orbitRef: ref },
+//                       }));
+//                     }
+//                   }}
+//                   enableZoom={false} // ❌ 禁止滚轮缩放
+//                 />
+//               </Canvas>
+
+//               {/* ✅ 控制区 */}
+//               <div className="absolute bottom-4 right-4 flex flex-col items-end gap-2">
+//                 {/* 3D 标签 */}
+//                 <div className="flex items-center bg-white/90 backdrop-blur-sm text-gray-700 text-xs font-medium px-2 py-1 rounded-full shadow">
+//                   <Cuboid  className="w-4 h-4 mr-1 text-brand-navy" />
+//                   3D Model
+//                 </div>
+
+//                 {/* 控制按钮组 */}
+//                 <div className="flex bg-white/80 backdrop-blur-sm rounded-full shadow">
+//                   <button
+//                     onClick={handleZoomOut}
+//                     className="p-1.5 hover:bg-gray-100 rounded-l-full"
+//                     title="Zoom Out"
+//                   >
+//                     <Minus className="w-4 h-4" />
+//                   </button>
+//                   <div className="w-px bg-gray-300" />
+//                   <button
+//                     onClick={handleZoomIn}
+//                     className="p-1.5 hover:bg-gray-100"
+//                     title="Zoom In"
+//                   >
+//                     <Plus className="w-4 h-4" />
+//                   </button>
+//                   <div className="w-px bg-gray-300" />
+//                   <button
+//                     onClick={handleReset}
+//                     className="p-1.5 hover:bg-gray-100 rounded-r-full"
+//                     title="Reset View"
+//                   >
+//                     <RotateCcw className="w-4 h-4" />
+//                   </button>
+//                 </div>
+//               </div>
+//             </Suspense>
+//           )}
+//       </div>
+
+//       {/* Hover 时显示左右切换按钮 */}
+//       {hovered && (
+//         <>
+//           <button
+//             onClick={handlePrev}
+//             className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white text-gray-800 p-2 rounded-full shadow transition"
+//           >
+//             <ChevronLeft className="w-6 h-6" />
+//           </button>
+
+//           <button
+//             onClick={handleNext}
+//             className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white text-gray-800 p-2 rounded-full shadow transition"
+//           >
+//             <ChevronRight className="w-6 h-6" />
+//           </button>
+//         </>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default ProductMediaViewer;

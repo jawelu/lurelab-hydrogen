@@ -63,9 +63,6 @@ function loadDeferredData({ context }: Route.LoaderArgs) {
 
 export default function Page() {
   const { page } = useLoaderData<typeof loader>();
-
-  console.log('page in pages',)
-
   return (
     <div className='min-h-screen pt-24 md:pt-32'>
       {/* Hero Section */}
