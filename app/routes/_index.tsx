@@ -164,7 +164,6 @@ export default function Homepage() {
                 {(response) => (
                   <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
                     {response?.products.nodes.map((product: any) => {
-                   
                       return (
                         <ProductItem
                           key={product.id}
@@ -522,7 +521,7 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
 
   query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
-    products(first: 4, sortKey: UPDATED_AT, reverse: true) {
+    products(first: 10, sortKey: UPDATED_AT, reverse: true) {
       nodes {
         ...RecommendedProduct
       }
