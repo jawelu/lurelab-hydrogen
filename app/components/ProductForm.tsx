@@ -22,6 +22,8 @@ export function ProductForm({
   className?: string;
 }) {
 
+  console.log('product', product)
+
  
 
   const navigate = useNavigate();
@@ -166,17 +168,17 @@ export function ProductForm({
         </div>
 
 
-        {/* Product Details Accordion */}
+        {/* Product Metafield Details Accordion */}
 
         <div className='mt-12 border-t border-brand-navy/10'>
           <div className='grid grid-cols-1 divide-y divide-brand-navy/10'>
-            {/* Materials Section */}
+            {/* Technical Specifications Section */}
             {
-              product?.materials?.value && (
+              product?.technicalSpecifications?.value && (
                 <details className='group py-6'>
                   <summary className=' flex items-center justify-between cursor-pointer list-none'>
                     <h3 className='font-family-playfair text-lg text-brand-navy'>
-                      Materials & Construction
+                      Technical Specifications
                     </h3>
                     <span className='relative flex-shrink-0 ml-4 w-4 h-4 '>
 
@@ -199,15 +201,15 @@ export function ProductForm({
                   </summary>
 
                   <div className='pt-4 prose font-family-source text-brand-navy/80'>
-                    <RichText data={product.materials.value} />
-                    {
-                      product.construction?.value && (
+                    <RichText data={product.technicalSpecifications.value} />
+                    {/* {
+                      product.technicalSpecifications?.value && (
                         <div className='mt-4'>
-                          <h4 className='font-family-playfair text-base text-brand-navy'>Construction</h4>
-                          <p>{product.construction.value}</p>
+                          <h4 className='font-family-playfair text-base text-brand-navy'> Technical Specifications</h4>
+                          <p>{product.technicalSpecifications.value}</p>
                         </div>
                       )
-                    }
+                    } */}
                   </div>
                 </details>
               )
@@ -215,13 +217,13 @@ export function ProductForm({
 
 
 
-            {/* Size & Fit Section */}
-
-              {product?.sizingNotes?.value && (
+            {/* Materials & Compatibility Section */}
+            {
+              product?.materialsAndCompatibility?.value && (
                 <details className='group py-6'>
                   <summary className=' flex items-center justify-between cursor-pointer list-none'>
                     <h3 className='font-family-playfair text-lg text-brand-navy'>
-                      Size & Fit
+                       Materials & Compatibility
                     </h3>
                     <span className='relative flex-shrink-0 ml-4 w-4 h-4 '>
 
@@ -244,20 +246,27 @@ export function ProductForm({
                   </summary>
 
                   <div className='pt-4 prose font-family-source text-brand-navy/80'>
-                    <p>{product.sizingNotes.value}</p>
+                    <RichText data={product.materialsAndCompatibility.value} />
+                    {/* {
+                      product.technicalSpecifications?.value && (
+                        <div className='mt-4'>
+                          <h4 className='font-family-playfair text-base text-brand-navy'> Technical Specifications</h4>
+                          <p>{product.technicalSpecifications.value}</p>
+                        </div>
+                      )
+                    } */}
                   </div>
                 </details>
               )
             }
 
-
-            {/* Care Instructions */}
-
-              {product?.careInstructions?.value && (
+            {/* usageAndTutorials Section */}
+            {
+              product?.usageAndTutorials?.value && (
                 <details className='group py-6'>
                   <summary className=' flex items-center justify-between cursor-pointer list-none'>
                     <h3 className='font-family-playfair text-lg text-brand-navy'>
-                      Care Guide
+                      Usage & Tutorials
                     </h3>
                     <span className='relative flex-shrink-0 ml-4 w-4 h-4 '>
 
@@ -280,12 +289,62 @@ export function ProductForm({
                   </summary>
 
                   <div className='pt-4 prose font-family-source text-brand-navy/80'>
-                     <RichText data={product.careInstructions.value} />
+                    <RichText data={product.usageAndTutorials.value} />
+                    {/* {
+                      product.technicalSpecifications?.value && (
+                        <div className='mt-4'>
+                          <h4 className='font-family-playfair text-base text-brand-navy'> Technical Specifications</h4>
+                          <p>{product.technicalSpecifications.value}</p>
+                        </div>
+                      )
+                    } */}
                   </div>
                 </details>
               )
             }
 
+             {/* packagingAndAccessories Section */}
+            {
+              product?.packagingAndAccessories?.value && (
+                <details className='group py-6'>
+                  <summary className=' flex items-center justify-between cursor-pointer list-none'>
+                    <h3 className='font-family-playfair text-lg text-brand-navy'>
+                      Packaging & Accessories
+                    </h3>
+                    <span className='relative flex-shrink-0 ml-4 w-4 h-4 '>
+
+                      <svg
+                        className="absolute inset-0 w-4 h-4 transition duration-300 group-open:rotate-180 text-black"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+
+                    </span>
+                  </summary>
+
+                  <div className='pt-4 prose font-family-source text-brand-navy/80'>
+                    <RichText data={product.packagingAndAccessories.value} />
+                    {/* {
+                      product.technicalSpecifications?.value && (
+                        <div className='mt-4'>
+                          <h4 className='font-family-playfair text-base text-brand-navy'> Technical Specifications</h4>
+                          <p>{product.technicalSpecifications.value}</p>
+                        </div>
+                      )
+                    } */}
+                  </div>
+                </details>
+              )
+            }
 
           </div>
 

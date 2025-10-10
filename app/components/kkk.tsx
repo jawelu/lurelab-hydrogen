@@ -453,7 +453,6 @@
 //   const currentState = modelStates[currentIndex];
 //   const currentMedia = media[currentIndex];
 
-//   console.log('currentMedia.sources', currentMedia.sources)
 
 //   const handlePrev = () =>
 //     setCurrentIndex((prev) => (prev === 0 ? media.length - 1 : prev - 1));

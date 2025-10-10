@@ -284,19 +284,19 @@ const PRODUCT_FRAGMENT = `#graphql
     }
 
     # Metafields
-    careInstructions: metafield(namespace: "custom", key: "care_instructions"){
+    packagingAndAccessories: metafield(namespace: "custom", key: "packagingAndAccessories"){
        value
     }
 
-    materials: metafield(namespace: "custom", key: "materials"){
+    usageAndTutorials: metafield(namespace: "custom", key: "usageAndTutorials"){
        value
     }
 
-    construction: metafield(namespace: "custom", key: "construction"){
+    materialsAndCompatibility: metafield(namespace: "custom", key: "materialsAndCompatibility"){
        value
     }
 
-    sizingNotes: metafield(namespace: "custom", key: "sizing_notes"){
+    technicalSpecifications: metafield(namespace: "custom", key: "technicalSpecifications"){
        value
     }
   }
