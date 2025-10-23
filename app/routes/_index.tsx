@@ -12,9 +12,13 @@ import ProductItem from '~/components/ProductItem';
 import { lazy, Suspense } from 'react';
 // import { ProductMediaViewer } from '~/components/product/Product3DImage';
 
-
-const Scene = lazy(() => import('~/components/Scene'));
-const ProductModelCard = lazy(() => import('~/components/product/ProductModelCard'));
+const SceneSenko = lazy(() => import('~/components/SceneSenko'));
+const SceneCoikeFullcast = lazy(() => import('~/components/SceneCoikeFullcast'))
+const SceneCoikeMold = lazy(() => import('~/components/SceneCoikeMold'))
+const SceneSwimbait = lazy(() => import('~/components/SceneSwimbait'))
+const SceneTubeMold = lazy(() => import('~/components/SceneTubeMold'))
+const SceneWackyWrapMold = lazy(() => import('~/components/SceneWackyWrapMold'))
+// const ProductModelCard = lazy(() => import('~/components/product/ProductModelCard'));
 
 const ProductMediaViewer = lazy(() => import('~/components/product/Product3DImage'));
 
@@ -87,43 +91,107 @@ export default function Homepage() {
   return (
     <div className="home">
       {/* Hero Section */}
-      <section className='relative h-screen min-h-[600px] bg-brand-navy'>
-        <Image
-          alt='Craftsmanship'
-          className='absolute inset-0 w-full h-full object-cover opacity-70'
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          loading="eager"
-          data={{
-            url: "/image/craftsmanship-handcrafting-leather-hands.jpg",
-            width: 1920,
-            height: 1080
-          }}
-        />
-        <div className='relative container mx-auto !px-4 h-full flex items-center'>
-          <div className='max-w-2xl'>
-            <h1 className='font-family-playfair text-4xl md:text-6xl text-white !mb-6'>
-              Artisinal Footwear for the Modern Sophisticate
-            </h1>
-            <p className='font-family-source text-lg text-gray-200 !mb-8'>
-              Handcrafted excellence, designed for distinction
-            </p>
-            <Link
-              to='/collections/all'
-              className='inline-flex items-center !px-8 !py-4 bg-brand-gold hover:bg-brand-goldDark 
-                transition-colors duration-300 text-white font-family-source font-medium'
-            >
-              Explore Collection
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Link>
+      <section className="relative  min-h-[700px] bg-white overflow-visible">
+        {/* 背景图片 */}
+        {/* <Image
+    alt="Craftsmanship"
+    className="absolute inset-0 w-full h-full object-cover opacity-100"
+    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+    loading="eager"
+    data={{
+      url: "/image/craftsmanship-handcrafting-leather-hands.jpg",
+      width: 1920,
+      height: 1080,
+    }}
+  /> */}
+
+        {/* 内容区：包含文字 + 模型 */}
+        <div className="relative z-2 container mx-auto h-full grid grid-cols-12 gap-8 items-center justify-items-center pt-16 px-4 overflow-visible">
+
+          {/* 左边模型 */}
+          <div className='col-span-12 md:col-span-4 w-full aspect-square overflow-visible'>
+            <Suspense fallback={null}>
+              <SceneCoikeMold />
+            </Suspense>
           </div>
+
+
+          {/* 中间文字区域 */}
+          <div className='col-span-12 md:col-span-4'>
+            <div className="text-center">
+              <h1 className="font-family-playfair text-3xl md:text-5xl text-black !mb-4">
+                Enhance Your
+                <br />
+                Fishing Experience
+              </h1>
+              <p className="font-family-source text-lg text-black !mb-8">
+                “MAKE YOUR BAITS - YOUR WAY”
+              </p>
+              <Link
+                to="/collections/all"
+                className="inline-flex items-center px-8 py-4 bg-black hover:bg-brand-goldDark 
+          transition-colors duration-300 text-white font-family-source font-medium rounded-lg shadow-md"
+              >
+                Explore Collection
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Link>
+            </div>
+          </div>
+
+          {/* 右边模型 */}
+      
+         
+           <div className='col-span-12 md:col-span-4 w-full aspect-square overflow-visible'>
+            <Suspense fallback={null}>
+               <SceneCoikeFullcast />
+            </Suspense>
+          </div>
+      
+
+          {/* 下边4个 */}
+          <div className='hidden md:block col-span-12 md:col-span-6 lg:col-span-3 w-full aspect-square overflow-visible'>
+           
+              <Suspense fallback={null}>
+                <SceneSenko />
+              </Suspense>
+        
+          </div>
+
+          <div className=' hidden md:block col-span-12 md:col-span-6 lg:col-span-3 w-full aspect-square overflow-visible'>
+       
+              <Suspense fallback={null}>
+                <SceneSwimbait />
+              </Suspense>
+  
+          </div>
+
+          <div className='hidden md:block col-span-12 md:col-span-6 lg:col-span-3 w-full aspect-square overflow-visible'>
+        
+              <Suspense fallback={null}>
+                <SceneTubeMold />
+              </Suspense>
+            
+          </div>
+
+          <div className='hidden md:block col-span-12 md:col-span-6 lg:col-span-3 w-full aspect-square overflow-visible'>
+       
+              <Suspense fallback={null}>
+                <SceneWackyWrapMold />
+              </Suspense>
+    
+          </div>
+
+
         </div>
       </section>
 
-      {/* <div className='w-full'>
-              <Suspense fallback={<div>Loading 3D scene...</div>}>
-                <Scene />
-             </Suspense>
-        </div> */}
+
+
+      {/* <div className='h-[800px]'>
+        <Suspense fallback={<div>Loading 3D scene...</div>}>
+          <Scene />
+        </Suspense>
+      </div> */}
 
 
       {/* <div className='w=[400px]'>
@@ -134,7 +202,7 @@ export default function Homepage() {
 />
 
              </Suspense>
-        </div>  */}
+        </div>   */}
 
 
 

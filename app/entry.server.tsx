@@ -19,10 +19,12 @@ export default async function handleRequest(
       checkoutDomain: context.env.PUBLIC_CHECKOUT_DOMAIN,
       storeDomain: context.env.PUBLIC_STORE_DOMAIN,
     },
+    //to fix Refused to load media from 'https://h70guu-bn.myshopify.com/cdn/shop/videos/c/vp/3ff422fbdbcf41d49ef6f6816047bbb9/3ff422fbdbcf41d49ef6f6816047bbb9.HD-720p-1.6Mbps-59606403.mp4' because it violates the following Content Security Policy
     mediaSrc: [
       "'self'",
       'https://cdn.shopify.com',
       'https://*.myshopify.com',
+      'https://jawelu.myshopify.com',
       'data:',
       'blob:',
     ],
