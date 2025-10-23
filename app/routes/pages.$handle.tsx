@@ -73,7 +73,8 @@ export default function Page() {
               {page.title}
             </h1>
             {page.subtitle?.value && (
-              <div className='font-family-source text-lg text-brand-cream' dangerouslySetInnerHTML={{ __html: page.subtitle.value }} />
+              <div className='font-family-source text-lg text-brand-cream' 
+              dangerouslySetInnerHTML={{ __html: page.subtitle.value }} />
             )}
           </div>
         </div>

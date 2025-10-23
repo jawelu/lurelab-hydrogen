@@ -12,7 +12,6 @@ import {ProductPrice} from '~/components/ProductPrice';
 import ProductImage from '~/components/ProductImage';
 import {ProductForm} from '~/components/ProductForm';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
-
 export const meta: MetaFunction<typeof loader> = ({data}) => {
   return [
     {title: `Hydrogen | ${data?.product.title ?? ''}`},
@@ -22,6 +21,8 @@ export const meta: MetaFunction<typeof loader> = ({data}) => {
     },
   ];
 };
+
+
 
 export async function loader(args: LoaderFunctionArgs) {
   // Start fetching non-critical data without blocking time to first byte
@@ -63,6 +64,17 @@ async function loadCriticalData({
   // The API handle might be localized, so redirect to the localized handle
   redirectIfHandleIsLocalized(request, {handle: productHandle, data: product});
 
+  // Check if product has only one variant with default title
+  const hasOnlyDefaultVariant = product.options?.every(
+    (option: any) => option.optionValues?.length === 1
+  );
+
+  // If product has only default variant and URL has query params, redirect to clean URL
+  const url = new URL(request.url);
+  if (hasOnlyDefaultVariant && url.search) {
+    throw redirect(url.pathname, 301);
+  }
+
   return {
     product,
   };
@@ -83,7 +95,6 @@ function loadDeferredData({context, params}: LoaderFunctionArgs) {
 export default function Product() {
   const {product} = useLoaderData<typeof loader>();
 
-
   const selectedVariant = useOptimisticVariant(
     product.selectedOrFirstAvailableVariant,
     product.id,
@@ -94,9 +105,6 @@ export default function Product() {
     ...product,
     selectedOrFirstAvailableVariant: selectedVariant,
   });
-
-
-  const {title, descriptionHtml} = product;
 
   return (
     <div className='pt-48 md:pt-48'>
