@@ -210,7 +210,7 @@ export default function Homepage() {
       <section className='py-20 px-4 bg-white'>
         <div className='container mx-auto'>
           <h2 className='font-family-playfair text-3xl text-center !mb-12'>
-            Our Latest Products
+            Our Latest Products1
           </h2>
           <div>
             <Suspense
@@ -255,7 +255,7 @@ export default function Homepage() {
       <section className='py-20 px-4 bg-white'>
         <div className='container mx-auto'>
           <h2 className='font-family-playfair text-3xl text-center !mb-12'>
-            Our Latest Products
+            Our Latest Products2
           </h2>
           <div>
             <Suspense
