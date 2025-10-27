@@ -108,7 +108,7 @@ export function Header({
                 ${isScrolled ? `text-xl sm:text-2xl` : `text-2xl sm:text-[28px]`}
                 `}
             >
-              <h1 className="font-medium text-brand-navy">LURELABkkk</h1>
+              <h1 className="font-medium text-brand-navy">LURELAB</h1>
             </NavLink>
 
             {/*Desktop Navigation*/}
